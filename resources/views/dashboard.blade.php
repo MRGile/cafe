@@ -32,15 +32,15 @@
                 <div class="col-6 col-lg-3 col-md-6">
                     <div class="card shadow-sm h-100 mb-0">
                         <div class="card-body p-3">
-                            <div class="row align-items-center">
-                                <div class="col-4 text-center">
+                            <div class="row">
+                                <div class="col-md-4">
                                     <div class="stats-icon green">
-                                        <i class="iconly-boldWallet"></i>
+                                        <i class="bi bi-check-circle-fill fs-4 text-white"></i>
                                     </div>
                                 </div>
-                                <div class="col-8 ps-0">
-                                    <h6 class="text-muted font-semibold mb-1 small">Omset Hari Ini</h6>
-                                    <h6 class="font-extrabold text-dark mb-0">Rp 12.850K</h6>
+                                <div class="col-md-8">
+                                    <h6 class="text-muted font-semibold">Menu Resto (Ready)</h6>
+                                    <h6 class="font-extrabold mb-0">{{ $readyMenu ?? $menus->where('status', 'tersedia')->count() }} Menu</h6>
                                 </div>
                             </div>
                         </div>
@@ -53,12 +53,12 @@
                             <div class="row align-items-center">
                                 <div class="col-4 text-center">
                                     <div class="stats-icon red">
-                                        <i class="iconly-boldBuy"></i>
+                                        <i class="bi bi-people-fill fs-4 text-white"></i>
                                     </div>
                                 </div>
                                 <div class="col-8 ps-0">
-                                    <h6 class="text-muted font-semibold mb-1 small">Total Pesanan</h6>
-                                    <h6 class="font-extrabold text-dark mb-0">128 Order</h6>
+                                    <h6 class="text-muted font-semibold mb-1 small">Total Tamu / Pax</h6>
+                                    <h6 class="font-extrabold text-dark mb-0">{{ $totalGuests ?? $reservations->sum('jumlah_orang') }} Orang</h6>
                                 </div>
                             </div>
                         </div>
@@ -94,7 +94,9 @@
                                 </div>
                                 <div class="col-8 ps-0">
                                     <h6 class="text-muted font-semibold mb-1 small">Status Meja</h6>
-                                    <h6 class="font-extrabold mb-0">{{ $approvedReservations ?? $reservations->where('status', 'approved')->count() }} Meja</h6>
+                                    <h6 class="font-extrabold mb-0">
+                                        {{ $approvedReservations }} Meja
+                                    </h6>
                                 </div>
                             </div>
                         </div>
@@ -183,32 +185,43 @@
                                             <th class="ps-4">Nama Menu</th>
                                             <th>Kategori</th>
                                             <th>Harga Jual</th>
-                                            <th>Terjual</th>
                                             <th>Status</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td class="ps-4"><p class="font-bold text-dark mb-0">Nasi Goreng Wagyu Special</p></td>
-                                            <td><span class="badge bg-light-primary text-primary">Makanan Utama</span></td>
-                                            <td><p class="font-bold text-dark mb-0">Rp 45.000</p></td>
-                                            <td><p class="font-bold text-dark mb-0">42 Porsi</p></td>
-                                            <td><span class="badge bg-success">🟢 Tersedia</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td class="ps-4"><p class="font-bold text-dark mb-0">Es Teh Manis Jumbo</p></td>
-                                            <td><span class="badge bg-light-info text-info">Minuman Dingin</span></td>
-                                            <td><p class="font-bold text-dark mb-0">Rp 10.000</p></td>
-                                            <td><p class="font-bold text-dark mb-0">68 Gelas</p></td>
-                                            <td><span class="badge bg-success">🟢 Tersedia</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td class="ps-4"><p class="font-bold text-dark mb-0">Kopi Tubruk Toraja</p></td>
-                                            <td><span class="badge bg-light-warning text-warning">Minuman Panas</span></td>
-                                            <td><p class="font-bold text-dark mb-0">Rp 18.000</p></td>
-                                            <td><p class="font-bold text-dark mb-0">30 Gelas</p></td>
-                                            <td><span class="badge bg-danger">🔴 Habis</span></td>
-                                        </tr>
+                                        @forelse ($menusTersedia as $menu)
+                                            <tr>
+                                                <td class="ps-4">
+                                                    <p class="font-bold text-dark mb-0">
+                                                        {{ $menu->nama }}
+                                                    </p>
+                                                </td>
+
+                                                <td>
+                                                    <span class="badge bg-light-primary text-primary">
+                                                        {{ $menu->kategori }}
+                                                    </span>
+                                                </td>
+
+                                                <td>
+                                                    <p class="font-bold text-dark mb-0">
+                                                        Rp {{ number_format($menu->harga, 0, ',', '.') }}
+                                                    </p>
+                                                </td>
+
+                                                <td>
+                                                    <span class="badge bg-success">
+                                                        🟢 Tersedia
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="4" class="text-center py-4 text-muted">
+                                                    Belum ada menu yang tersedia.
+                                                </td>
+                                            </tr>
+                                        @endforelse
                                     </tbody>
                                 </table>
                             </div>
@@ -223,20 +236,33 @@
         <div class="col-12 col-lg-3 mt-4 mt-lg-0">
 
             <!-- Profile Card -->
-            <div class="card shadow-sm mb-4">
-                <div class="card-body p-3">
-                    <div class="d-flex align-items-center gap-3">
-                        <div class="avatar avatar-xl bg-primary text-white font-bold d-flex align-items-center justify-content-center rounded-circle shadow-sm" style="width: 52px; height: 52px; font-size: 1.2rem;">
-                            LM
-                        </div>
-                        <div class="overflow-hidden">
-                            <h6 class="font-bold text-dark mb-0 text-truncate">Muhamad Lizam M.</h6>
-                            <small class="text-muted d-block text-truncate">@lizam_mhtr</small>
-                            <span class="badge bg-light-primary text-primary mt-1 font-semibold" style="font-size: 0.72rem;">Head Manager</span>
+            <a href="{{ route('profile') }}" class="text-decoration-none">
+                <div class="card shadow-sm mb-4 profile-card">
+                    <div class="card-body p-3">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="avatar avatar-xl bg-primary text-white font-bold d-flex align-items-center justify-content-center rounded-circle shadow-sm"
+                                style="width: 52px; height: 52px; font-size: 1.2rem;">
+                                <img src="{{ asset('assets/images/faces/9.jpg') }}">
+                            </div>
+
+                            <div class="overflow-hidden">
+                                <h6 class="font-bold text-dark mb-0 text-truncate">
+                                    Muhamad Lizam M.
+                                </h6>
+
+                                <small class="text-muted d-block text-truncate">
+                                    @lizam_mhtr
+                                </small>
+
+                                <span class="badge bg-light-primary text-primary mt-1 font-semibold"
+                                    style="font-size: 0.72rem;">
+                                    Head Manager
+                                </span>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </a>
 
             <!-- Tim Administrasi Card (Clean & Flush) -->
             <div class="card shadow-sm">
@@ -289,11 +315,11 @@
 
                     </ul>
                 </div>
-                <div class="card-footer bg-light p-3 text-center border-top">
-                    <a href="{{ route('Adminlist') }}" class="btn btn-outline-primary btn-sm font-bold w-100">
+                {{-- <div class="card-footer bg-light p-3 text-center border-top">
+                    <a href="{{ route('employeelist') }}" class="btn btn-outline-primary btn-sm font-bold w-100">
                         <i class="bi bi-people me-1"></i> Lihat Semua Admin
                     </a>
-                </div>
+                </div> --}}
             </div>
 
         </div>

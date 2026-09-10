@@ -34,23 +34,19 @@ class MenuController extends Controller
             'modal_hpp' => 'required|numeric|min:0',
             'estimasi_menit' => 'nullable|integer|min:1',
             'deskripsi' => 'nullable|string',
-            'gambar' =>'required|image|mimes:jpg,jpeg,png,webp|max:2048',
-            'image' => 'required|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'gambar' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
             'status' => 'nullable|in:tersedia,habis',
         ]);
 
         $gambarPath = null;
-        
-        // Handle Upload Foto Menu
+
         if ($request->hasFile('gambar')) {
             $file = $request->file('gambar');
+
             $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+
             $file->move(public_path('uploads/menus'), $filename);
-            $gambarPath = 'uploads/menus/' . $filename;
-        } elseif ($request->hasFile('image')) {
-            $file = $request->file('image');
-            $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
-            $file->move(public_path('uploads/menus'), $filename);
+
             $gambarPath = 'uploads/menus/' . $filename;
         }
 
@@ -58,14 +54,17 @@ class MenuController extends Controller
             'nama' => $validated['nama'],
             'kategori' => $validated['kategori'],
             'harga' => $validated['harga'],
-            'modal_hpp' => $request->input('modal_hpp', $request->input('cost_price')),
-            'estimasi_menit' => $request->input('estimasi_menit', $request->input('cook_time')),
-            'deskripsi' => $request->input('deskripsi', $request->input('description')),
+            'modal_hpp' => $validated['modal_hpp'],
+            'estimasi_menit' => $validated['estimasi_menit'] ?? null,
+            'deskripsi' => $validated['deskripsi'] ?? null,
             'gambar' => $gambarPath,
-            'status' => $request->input('status', 'tersedia'),
+            'status' => $validated['status'] ?? 'tersedia',
         ]);
 
-        return redirect()->back()->with('success', 'Menu baru berhasil ditambahkan ke database!');
+        return redirect()->back()->with(
+            'success',
+            'Menu baru berhasil ditambahkan ke database!'
+        );
     }
 
     /**
@@ -75,7 +74,7 @@ class MenuController extends Controller
     {
         $menu = Menu::findOrFail($id);
         $newStatus = $request->input('status', $menu->status === 'tersedia' ? 'habis' : 'tersedia');
-        
+
         $menu->update([
             'status' => $newStatus,
         ]);
@@ -89,7 +88,7 @@ class MenuController extends Controller
     public function destroy($id)
     {
         $menu = Menu::findOrFail($id);
-        
+
         if ($menu->gambar && file_exists(public_path($menu->gambar))) {
             @unlink(public_path($menu->gambar));
         }

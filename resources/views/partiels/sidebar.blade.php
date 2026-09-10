@@ -5,7 +5,7 @@
             <div class="sidebar-header">
                 <a href="{{ route('dashboard') }}" class="d-flex align-items-center gap-2">
                     <img src="{{ asset('assets/images/logo/5.png') }}" alt="Logo" style="width: 42px; height: auto;">
-                    <span class="fs-5 fw-bold text-primary">Resto Admin</span>
+                    <span class="fs-5 fw-bold text-primary">Nusantara</span>
                 </a>
             </div>
 
@@ -49,12 +49,12 @@
                     <li class="sidebar-title">Laporan & Sistem</li>
 
                     {{-- Laporan Penjualan --}}
-                    <li class="sidebar-item {{ request()->routeIs('Salesreport') || request()->routeIs('laporan') ? 'active' : '' }}">
+                    {{-- <li class="sidebar-item {{ request()->routeIs('Salesreport') || request()->routeIs('laporan') ? 'active' : '' }}">
                         <a class="sidebar-link" href="{{ route('Salesreport') }}">
                             <i class="bi bi-bar-chart-line-fill"></i>
                             <span>Laporan Penjualan</span>
                         </a>
-                    </li>
+                    </li> --}}
 
                     {{-- Profile --}}
                     <li class="sidebar-item {{ request()->routeIs('profile') ? 'active' : '' }}">
