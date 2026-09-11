@@ -16,9 +16,9 @@ class UserSeeder extends Seeder
             'name'       => 'Admin Kedai Kopi',
             'email'      => 'AdminNusantara@gmail.com',
             'password'   => Hash::make('Nusantara123'),
-            // 'role_id'    => $adminRole?->id,
-            // 'created_at' => now(),
-            // 'updated_at' => now(),
+            'role_id'    => $adminRole?->id,
+            'created_at' => now(),
+            'updated_at' => now(),
         ]);
     }
 }
