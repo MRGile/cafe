@@ -27,9 +27,10 @@ Route::get('/menus', [MenuController::class, 'index'])->name('menus');
 Route::get('/Categories', [MenuController::class, 'index'])->name('Categories');
 Route::get('/Addmenu', [MenuController::class, 'index'])->name('Addmenu');
 Route::get('/menu', [MenuController::class, 'index'])->name('menu');
-
+Route::put('/menus/{id}', [MenuController::class, 'update'])->name('menu.update');
 Route::post('/menu', [MenuController::class, 'store'])->name('menu.store');
 Route::patch('/menu/{id}/status', [MenuController::class, 'updateStatus'])->name('menu.status');
+Route::put('/menu/{id}', [MenuController::class, 'update'])->name('menu.update');
 Route::delete('/menu/{id}', [MenuController::class, 'destroy'])->name('menu.destroy');
 
 // 4. Fitur Reservasi Meja Restoran
@@ -70,3 +71,17 @@ Route::get('/roles', function () { return view('roles'); })->name('roles');
 Route::get('/activity', function () { return view('activity'); })->name('activity');
 Route::get('/register', function () { return view('register'); })->name('register');
 Route::get('/forgot', function () { return view('forgot'); })->name('forgot');
+
+// Menu yang di perlu admin
+  use App\Http\Controllers\AuthController;
+
+    Route::get('/login', function () { return view('login'); })->name('login');
+    Route::post('/login', [AuthController::class, 'login'])->name('login.attempt');
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+    Route::middleware('auth')->group(function () {
+        // Route::get('/dashboard', function () {return view('dashboard');})->name('dashboard');
+        // Route::get('/Menulist', function () {return view('Menulist');})->name('Menulist');
+        // Route::get('/reservation', function () {return view('reservation');})->name('reservation');
+        // Route::get('/employeelist', function () {return view('employeelist');})->name('employeelist');
+    });

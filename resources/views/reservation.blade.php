@@ -223,48 +223,83 @@
                                                 <span class="badge bg-danger">🔴 Ditolak</span>
                                             @endif
                                         </td>
-
                                         <td class="text-end pe-4">
+
                                             @if ($reservation->status === 'pending')
-                                                <!-- Form Admin Menentukan Meja & Approve -->
-                                                <form action="{{ route('reservation.approve', $reservation->id) }}" method="POST" class="d-inline-flex gap-1 align-items-center">
-                                                    @csrf
-                                                    @method('PATCH')
-                                                    <select name="no_meja" class="form-select form-select-sm" style="width: 110px;" required>
-                                                        <option value="" disabled selected>Pilih Meja</option>
-                                                        @for ($m = 1; $m <= 12; $m++)
-                                                            @php $mName = 'Meja ' . str_pad($m, 2, '0', STR_PAD_LEFT); @endphp
-                                                            <option value="{{ $mName }}">{{ $mName }}</option>
-                                                        @endfor
-                                                    </select>
-                                                    <button type="submit" class="btn btn-sm btn-success font-bold" title="ACC & Berikan Meja">
-                                                        <i class="bi bi-check-lg"></i> ACC
-                                                    </button>
-                                                </form>
 
-                                                <!-- Form Reject -->
-                                                <form action="{{ route('reservation.reject', $reservation->id) }}" method="POST" class="d-inline">
-                                                    @csrf
-                                                    @method('PATCH')
-                                                    <button type="submit" class="btn btn-sm btn-outline-danger" title="Tolak Reservasi">
-                                                        <i class="bi bi-x-lg"></i>
-                                                    </button>
-                                                </form>
+                                                <div class="d-flex justify-content-end align-items-center gap-2">
 
+                                                    <!-- Form Admin Menentukan Meja & Approve -->
+                                                    <form action="{{ route('reservation.approve', $reservation->id) }}"
+                                                        method="POST"
+                                                        class="d-flex gap-2 align-items-center">
+
+                                                        @csrf
+                                                        @method('PATCH')
+
+                                                        <!-- Pilih Meja -->
+                                                        <select name="no_meja"
+                                                                class="form-select form-select-sm"
+                                                                style="width: 120px;"
+                                                                required>
+
+                                                            <option value="" disabled selected>
+                                                                Pilih Meja
+                                                            </option>
+
+                                                            @for ($m = 1; $m <= 12; $m++)
+                                                                @php
+                                                                    $mName = 'Meja ' . str_pad($m, 2, '0', STR_PAD_LEFT);
+                                                                @endphp
+
+                                                                <option value="{{ $mName }}">
+                                                                    {{ $mName }}
+                                                                </option>
+                                                            @endfor
+
+                                                        </select>
+                                                        <!-- ACC -->
+                                                        <button type="submit"
+                                                                class="btn btn-sm btn-success font-bold px-3"
+                                                                title="ACC & Berikan Meja">
+
+                                                            <i class="bi bi-check-lg me-1"></i>
+                                                            ACC
+                                                        </button>
+                                                    </form>
+                                                    <!-- Reject -->
+                                                    <form action="{{ route('reservation.reject', $reservation->id) }}"
+                                                        method="POST"
+                                                        onsubmit="return confirm('Yakin ingin menolak reservasi ini?')">
+                                                        @csrf
+                                                        @method('PATCH')
+                                                        <button type="submit"
+                                                                class="btn btn-sm btn-outline-danger px-2"
+                                                                title="Tolak Reservasi">
+                                                            <i class="bi bi-x-lg"></i>
+                                                        </button>
+                                                    </form>
+                                                </div>
                                             @else
                                                 <div class="d-inline-flex gap-1">
+
                                                     <!-- Delete Reservation -->
-                                                    <form action="{{ route('reservation.destroy', $reservation->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data reservasi ini?')">
+                                                    <form action="{{ route('reservation.destroy', $reservation->id) }}"
+                                                        method="POST"
+                                                        class="d-inline"
+                                                        onsubmit="return confirm('Apakah Anda yakin ingin menghapus data reservasi ini?')">
                                                         @csrf
                                                         @method('DELETE')
-                                                        <button type="submit" class="btn btn-sm btn-light-danger" title="Hapus Data Reservasi">
-                                                            <i class="bi bi-trash"></i> Hapus
+                                                        <button type="submit"
+                                                                class="btn btn-sm btn-light-danger px-3"
+                                                                title="Hapus Data Reservasi">
+                                                            <i class="bi bi-trash me-1"></i>
+                                                            Hapus
                                                         </button>
                                                     </form>
                                                 </div>
                                             @endif
-                                        </td>
-
+                                        </td>       
                                     </tr>
 
                                 @empty

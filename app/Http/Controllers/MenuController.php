@@ -8,9 +8,9 @@ use Illuminate\Support\Facades\Storage;
 
 class MenuController extends Controller
 {
-    /**
-     * Menampilkan daftar master menu dan statistik
-     */
+
+    //  Menampilkan daftar master menu dan statistik
+
     public function index()
     {
         $menus = Menu::latest()->get();
@@ -22,9 +22,9 @@ class MenuController extends Controller
         return view('Menulist', compact('menus', 'totalMenu', 'readyMenu', 'soldOutMenu', 'totalCategory'));
     }
 
-    /**
-     * Menyimpan menu baru ke database beserta file gambar
-     */
+
+    //  Menyimpan menu baru ke database beserta file gambar
+
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -42,11 +42,8 @@ class MenuController extends Controller
 
         if ($request->hasFile('gambar')) {
             $file = $request->file('gambar');
-
             $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
-
             $file->move(public_path('uploads/menus'), $filename);
-
             $gambarPath = 'uploads/menus/' . $filename;
         }
 
@@ -67,14 +64,19 @@ class MenuController extends Controller
         );
     }
 
-    /**
-     * Mengubah status ketersediaan menu (tersedia / habis)
-     */
+    public function edit($id)
+    {
+        $menu = Menu::findOrFail($id);
+        return view('editMenu', compact('menu'));
+    }
+
+
+    //  Mengubah status ketersediaan menu (tersedia / habis)
+
     public function updateStatus(Request $request, $id)
     {
         $menu = Menu::findOrFail($id);
         $newStatus = $request->input('status', $menu->status === 'tersedia' ? 'habis' : 'tersedia');
-
         $menu->update([
             'status' => $newStatus,
         ]);
@@ -82,19 +84,47 @@ class MenuController extends Controller
         return redirect()->back()->with('success', 'Status ketersediaan menu berhasil diperbarui!');
     }
 
-    /**
-     * Menghapus menu dari database
-     */
-    public function destroy($id)
+    // mengubah data menu di database
+    public function update(Request $request, $id)
     {
         $menu = Menu::findOrFail($id);
 
+        $validated = $request->validate([
+            'nama' => 'required|string|max:255',
+            'kategori' => 'required|string|max:100',
+            'harga' => 'required|numeric|min:0',
+            'modal_hpp' => 'required|numeric|min:0',
+            'estimasi_menit' => 'nullable|integer|min:1',
+            'deskripsi' => 'nullable|string',
+            'gambar' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'status' => 'nullable|in:tersedia,habis',
+        ]);
+
+        if ($request->hasFile('gambar')) {
+            if ($menu->gambar && file_exists(public_path($menu->gambar))) {
+                @unlink(public_path($menu->gambar));
+            }
+            $file = $request->file('gambar');
+            $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('uploads/menus'), $filename);
+            $validated['gambar'] = 'uploads/menus/' . $filename;
+        }
+
+        $menu->update($validated);
+
+        return redirect()->back()->with('success', 'Data menu berhasil diperbarui!');
+    }
+
+
+
+    //  Menghapus menu dari database
+    public function destroy($id)
+    {
+        $menu = Menu::findOrFail($id);
         if ($menu->gambar && file_exists(public_path($menu->gambar))) {
             @unlink(public_path($menu->gambar));
         }
-
         $menu->delete();
-
         return redirect()->back()->with('success', 'Menu berhasil dihapus dari database!');
     }
 }

@@ -1,152 +1,410 @@
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daftar Akun Admin - Nusantara Restaurant</title>
-    
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/vendors/bootstrap-icons/bootstrap-icons.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/css/app.css') }}">
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>Daftar Akun - Nusantara Restaurant</title>
+
+    <!-- Favicon -->
     <link rel="icon" type="image/png" href="{{ asset('assets/images/logo/5.png') }}">
 
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
+
+    <!-- Bootstrap -->
+    <link href="{{ asset('asst/vendor/bootstrap/css/bootstrap.min.css') }}"
+          rel="stylesheet">
+
     <style>
+
+        * { box-sizing: border-box; }
+
+        html, body {
+            width: 100%;
+            min-height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
         body {
-            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            font-family: "Inter", sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* BACKGROUND */
+        .reservation-page {
+            min-height: 100vh;
+            background:
+                linear-gradient(rgba(0,0,0,0.52), rgba(0,0,0,0.68)),
+                url("{{ asset('asst/img/3.jpeg') }}") center center / cover no-repeat;
+            background-attachment: fixed;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        /* TOP MENU */
+        .reservation-menu {
+            position: fixed;
+            top: 25px;
+            right: 30px;
+            display: flex;
+            gap: 10px;
+            z-index: 9999;
+        }
+
+        .menu-icon {
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            color: #fff;
+            background: rgba(20,20,20,0.45);
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            transition: 0.3s ease;
+        }
+
+        .menu-icon i { font-size: 18px; }
+
+        .menu-icon:hover {
+            color: #fff;
+            background: rgba(0,0,0,0.75);
+            transform: translateY(-3px);
+        }
+
+        .menu-icon.active {
+            background: #00a63c;
+            border-color: #00a63c;
+        }
+
+        .menu-icon.active:hover { background: #00c94a; }
+
+        /* WRAPPER */
+        .reservation-wrapper {
+            width: 100%;
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-family: 'Nunito', sans-serif;
-            padding: 20px 0;
+            padding: 90px 20px 40px;
         }
 
-        .auth-card {
-            background: #ffffff;
-            border-radius: 16px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
-            overflow: hidden;
+        /* CARD */
+        .reservation-card {
             width: 100%;
-            max-width: 480px;
+            max-width: 450px;
+            padding: 45px 40px 35px;
+            position: relative;
+            text-align: center;
+            background: rgba(25,25,25,0.48);
+            border: 1px solid rgba(255,255,255,0.18);
+            border-radius: 4px;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.55);
+            color: #fff;
         }
 
-        .auth-header {
-            background: #435ebe;
-            color: #ffffff;
-            padding: 28px 24px;
+        /* LOGO */
+        .reservation-logo {
+            width: 76px;
+            height: 76px;
+            position: absolute;
+            top: -38px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255,255,255,0.95);
+            border: 4px solid rgba(255,255,255,0.9);
+            border-radius: 50%;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+        }
+
+        .reservation-logo img {
+            width: 58px;
+            height: 58px;
+            object-fit: contain;
+            border-radius: 50%;
+        }
+
+        /* TITLE */
+        .reservation-card h2 {
+            margin: 5px 0 7px;
+            color: #fff;
+            font-size: 21px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .reservation-subtitle {
+            margin: 0 0 25px;
+            color: rgba(255,255,255,0.65);
+            font-size: 11px;
+            font-weight: 400;
+        }
+
+        /* FORM */
+        .reservation-form {
+            width: 100%;
+            text-align: left;
+        }
+
+        /* INPUT */
+        .input-box {
+            width: 100%;
+            position: relative;
+            margin-bottom: 13px;
+        }
+
+        .input-box i {
+            position: absolute;
+            left: 13px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255,255,255,0.65);
+            font-size: 13px;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .input-box input {
+            width: 100%;
+            outline: none;
+            border: none;
+            border-bottom: 1px solid rgba(255,255,255,0.28);
+            border-radius: 0;
+            background: rgba(0,0,0,0.25);
+            color: #fff;
+            font-family: "Inter", sans-serif;
+            font-size: 11px;
+            height: 40px;
+            padding: 10px 12px 10px 38px;
+            transition: 0.3s ease;
+        }
+
+        .input-box input::placeholder { color: rgba(255,255,255,0.55); }
+
+        .input-box input:focus {
+            border-bottom-color: #00b843;
+            background: rgba(0,0,0,0.4);
+        }
+
+        /* CHECKBOX */
+        .check-box {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .check-box input[type="checkbox"] {
+            width: 14px;
+            height: 14px;
+            margin-top: 2px;
+            accent-color: #00a63c;
+            flex-shrink: 0;
+            cursor: pointer;
+        }
+
+        .check-box label {
+            font-size: 11px;
+            color: rgba(255,255,255,0.6);
+            cursor: pointer;
+            line-height: 1.5;
+        }
+
+        .check-box label a {
+            color: #00c94a;
+            text-decoration: none;
+        }
+
+        .check-box label a:hover { text-decoration: underline; }
+
+        /* BUTTON */
+        .reservation-button {
+            width: 100%;
+            height: 40px;
+            margin-top: 8px;
+            border: none;
+            border-radius: 20px;
+            background: #00a63c;
+            color: #fff;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.7px;
+            cursor: pointer;
+            transition: 0.3s ease;
+        }
+
+        .reservation-button i { margin-right: 6px; }
+
+        .reservation-button:hover {
+            background: #00c94a;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0,180,60,0.35);
+        }
+
+        /* AUTH LINKS */
+        .auth-link {
+            color: #00c94a;
+            text-decoration: none;
+            font-size: 11px;
+            transition: 0.2s;
+        }
+
+        .auth-link:hover {
+            color: #00e855;
+            text-decoration: underline;
+        }
+
+        /* FOOTER */
+        .auth-footer {
+            margin-top: 20px;
+            padding-top: 16px;
+            border-top: 1px solid rgba(255,255,255,0.12);
+            font-size: 11px;
+            color: rgba(255,255,255,0.55);
             text-align: center;
         }
 
-        .auth-logo-icon {
-            width: 56px;
-            height: 56px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
-            display: inline-flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-            font-size: 26px;
-            margin-bottom: 10px;
+        /* MOBILE */
+        @media (max-width: 576px) {
+            .reservation-menu { top: 15px; right: 15px; }
+            .menu-icon { width: 40px; height: 40px; }
+            .menu-icon i { font-size: 16px; }
+            .reservation-wrapper { padding: 85px 15px 30px; }
+            .reservation-card { max-width: 100%; padding: 42px 22px 30px; }
+            .reservation-card h2 { font-size: 18px; }
         }
 
-        .form-control-icon {
-            display: flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-            top: 50% !important;
-            transform: translateY(-50%) !important;
-        }
     </style>
+
 </head>
+<body class="reservation-page">
 
-<body>
+    <!-- TOP MENU -->
+    <div class="reservation-menu">
+        <a href="{{ url('/utama') }}" class="menu-icon" title="Home">
+            <i class="bi bi-house-fill"></i>
+        </a>
+        <a href="#" class="menu-icon active" title="Daftar">
+            <i class="bi bi-person-plus-fill"></i>
+        </a>
+    </div>
 
-    <div class="container p-3">
-        <div class="auth-card mx-auto">
-            
-            <!-- Header -->
-            <div class="auth-header text-center">
-                <div class="auth-logo-icon mx-auto">
-                    <i class="bi bi-cup-hot-fill"></i>
-                </div>
-                <h4 class="fw-bold mb-1 text-white">Nusantara Restaurant</h4>
-                <p class="mb-0 opacity-75 small">Pendaftaran Akun Baru Admin & POS System</p>
+
+    <main class="reservation-wrapper">
+
+        <div class="reservation-card">
+
+            <!-- LOGO -->
+            <div class="reservation-logo">
+                <img src="{{ asset('assets/images/logo/5.png') }}"
+                     alt="Nusantara Restaurant">
             </div>
 
-            <!-- Form Body -->
-            <div class="p-4 p-md-5">
-                <h5 class="fw-bold text-dark mb-1">Buat Akun Baru</h5>
-                <p class="text-muted small mb-4">Lengkapi data kamu di bawah untuk membuat akun pengelola restoran.</p>
+            <!-- TITLE -->
+            <h2>BUAT AKUN BARU</h2>
+            <p class="reservation-subtitle">
+                Pendaftaran akun admin Nusantara Restaurant
+            </p>
 
-                <form action="{{ route('dashboard') }}" method="GET">
-                    
-                    <!-- Input Nama Lengkap -->
-                    <div class="form-group position-relative has-icon-left mb-3">
-                        <input type="text" class="form-control form-control-lg" placeholder="Nama Lengkap" required>
-                        <div class="form-control-icon">
-                            <i class="bi bi-person-badge"></i>
-                        </div>
-                    </div>
+            <!-- FORM -->
+            <form action="{{ route('dashboard') }}"
+                  method="GET"
+                  class="reservation-form">
 
-                    <!-- Input Email -->
-                    <div class="form-group position-relative has-icon-left mb-3">
-                        <input type="email" class="form-control form-control-lg" placeholder="Email (misal: admin@resto.com)" required>
-                        <div class="form-control-icon">
-                            <i class="bi bi-envelope"></i>
-                        </div>
-                    </div>
-
-                    <!-- Input Username -->
-                    <div class="form-group position-relative has-icon-left mb-3">
-                        <input type="text" class="form-control form-control-lg" placeholder="Username (misal: lizam_admin)" required>
-                        <div class="form-control-icon">
-                            <i class="bi bi-person"></i>
-                        </div>
-                    </div>
-
-                    <!-- Input Password -->
-                    <div class="form-group position-relative has-icon-left mb-3">
-                        <input type="password" class="form-control form-control-lg" placeholder="Kata Sandi" required>
-                        <div class="form-control-icon">
-                            <i class="bi bi-shield-lock"></i>
-                        </div>
-                    </div>
-
-                    <!-- Input Konfirmasi Password -->
-                    <div class="form-group position-relative has-icon-left mb-3">
-                        <input type="password" class="form-control form-control-lg" placeholder="Konfirmasi Kata Sandi" required>
-                        <div class="form-control-icon">
-                            <i class="bi bi-check2-circle"></i>
-                        </div>
-                    </div>
-
-                    <!-- Checkbox Terms -->
-                    <div class="form-check mb-4 small">
-                        <input class="form-check-input" type="checkbox" id="agreeTerms" required checked>
-                        <label class="form-check-label text-muted" for="agreeTerms">
-                            Saya menyetujui <a href="#" class="text-primary font-bold text-decoration-none">Syarat & Ketentuan</a> restoran.
-                        </label>
-                    </div>
-
-                    <!-- Submit Button -->
-                    <button type="submit" class="btn btn-primary btn-lg w-100 font-bold shadow d-flex align-items-center justify-content-center gap-2">
-                        <i class="bi bi-person-plus-fill"></i>
-                        <span>Daftar Akun Sekarang</span>
-                    </button>
-                </form>
-
-                <!-- Footer Text -->
-                <div class="text-center mt-4 pt-3 border-top small text-muted">
-                    <span>Sudah memiliki akun admin? </span>
-                    <a href="{{ route('login') }}" class="text-primary font-bold text-decoration-none">Login Di Sini</a>
+                <!-- NAMA LENGKAP -->
+                <div class="input-box">
+                    <i class="bi bi-person-badge-fill"></i>
+                    <input type="text"
+                           name="name"
+                           placeholder="Nama Lengkap"
+                           required>
                 </div>
+
+                <!-- EMAIL -->
+                <div class="input-box">
+                    <i class="bi bi-envelope-fill"></i>
+                    <input type="email"
+                           name="email"
+                           placeholder="Email (misal: admin@resto.com)"
+                           required>
+                </div>
+
+                <!-- USERNAME -->
+                <div class="input-box">
+                    <i class="bi bi-person-fill"></i>
+                    <input type="text"
+                           name="username"
+                           placeholder="Username (misal: lizam_admin)"
+                           required>
+                </div>
+
+                <!-- PASSWORD -->
+                <div class="input-box">
+                    <i class="bi bi-shield-lock-fill"></i>
+                    <input type="password"
+                           name="password"
+                           placeholder="Kata Sandi"
+                           required>
+                </div>
+
+                <!-- KONFIRMASI PASSWORD -->
+                <div class="input-box">
+                    <i class="bi bi-check2-circle"></i>
+                    <input type="password"
+                           name="password_confirmation"
+                           placeholder="Konfirmasi Kata Sandi"
+                           required>
+                </div>
+
+                <!-- TERMS -->
+                <div class="check-box">
+                    <input type="checkbox" id="agreeTerms" required checked>
+                    <label for="agreeTerms">
+                        Saya menyetujui <a href="#">Syarat &amp; Ketentuan</a> restoran.
+                    </label>
+                </div>
+
+                <!-- BUTTON -->
+                <button type="submit" class="reservation-button">
+                    <i class="bi bi-person-plus-fill"></i>
+                    DAFTAR AKUN SEKARANG
+                </button>
+
+            </form>
+
+            <!-- FOOTER -->
+            <div class="auth-footer">
+                <span>Sudah memiliki akun admin? </span>
+                <a href="{{ route('login') }}" class="auth-link">Login Di Sini</a>
             </div>
 
         </div>
-    </div>
+
+    </main>
+
+
+    <script src="{{ asset('asst/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 
 </body>
 </html>

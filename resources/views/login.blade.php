@@ -1,132 +1,376 @@
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Nusantara Restaurant Admin</title>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/vendors/bootstrap-icons/bootstrap-icons.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/css/app.css') }}">
+    <title>Login - Nusantara Restaurant</title>
+
+    <!-- Favicon -->
     <link rel="icon" type="image/png" href="{{ asset('assets/images/logo/5.png') }}">
 
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
+
+    <!-- Bootstrap -->
+    <link href="{{ asset('asst/vendor/bootstrap/css/bootstrap.min.css') }}"
+          rel="stylesheet">
+
     <style>
+
+        * { box-sizing: border-box; }
+
+        html, body {
+            width: 100%;
+            min-height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
         body {
-            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            font-family: "Inter", sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* BACKGROUND */
+        .reservation-page {
+            min-height: 100vh;
+            background:
+                linear-gradient(rgba(0,0,0,0.52), rgba(0,0,0,0.68)),
+                url("{{ asset('asst/img/3.jpeg') }}") center center / cover no-repeat;
+            background-attachment: fixed;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        /* TOP MENU */
+        .reservation-menu {
+            position: fixed;
+            top: 25px;
+            right: 30px;
+            display: flex;
+            gap: 10px;
+            z-index: 9999;
+        }
+
+        .menu-icon {
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            color: #fff;
+            background: rgba(20,20,20,0.45);
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            transition: 0.3s ease;
+        }
+
+        .menu-icon i { font-size: 18px; }
+
+        .menu-icon:hover {
+            color: #fff;
+            background: rgba(0,0,0,0.75);
+            transform: translateY(-3px);
+        }
+
+        .menu-icon.active {
+            background: #00a63c;
+            border-color: #00a63c;
+        }
+
+        .menu-icon.active:hover { background: #00c94a; }
+
+        /* WRAPPER */
+        .reservation-wrapper {
+            width: 100%;
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-family: 'Nunito', sans-serif;
-            padding: 20px 0;
+            padding: 90px 20px 40px;
         }
 
-        .auth-card {
-            background: #ffffff;
-            border-radius: 16px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
-            overflow: hidden;
+        /* CARD */
+        .reservation-card {
             width: 100%;
-            max-width: 440px;
+            max-width: 420px;
+            padding: 45px 40px 35px;
+            position: relative;
+            text-align: center;
+            background: rgba(25,25,25,0.48);
+            border: 1px solid rgba(255,255,255,0.18);
+            border-radius: 4px;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.55);
+            color: #fff;
         }
 
-        .auth-header {
-            background: #435ebe;
-            color: #ffffff;
-            padding: 32px 24px;
+        /* LOGO */
+        .reservation-logo {
+            width: 76px;
+            height: 76px;
+            position: absolute;
+            top: -38px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255,255,255,0.95);
+            border: 4px solid rgba(255,255,255,0.9);
+            border-radius: 50%;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+        }
+
+        .reservation-logo img {
+            width: 58px;
+            height: 58px;
+            object-fit: contain;
+            border-radius: 50%;
+        }
+
+        /* TITLE */
+        .reservation-card h2 {
+            margin: 5px 0 7px;
+            color: #fff;
+            font-size: 21px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .reservation-subtitle {
+            margin: 0 0 25px;
+            color: rgba(255,255,255,0.65);
+            font-size: 11px;
+            font-weight: 400;
+        }
+
+        /* FORM */
+        .reservation-form {
+            width: 100%;
+            text-align: left;
+        }
+
+        /* INPUT */
+        .input-box {
+            width: 100%;
+            position: relative;
+            margin-bottom: 13px;
+        }
+
+        .input-box i {
+            position: absolute;
+            left: 13px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255,255,255,0.65);
+            font-size: 13px;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .input-box input {
+            width: 100%;
+            outline: none;
+            border: none;
+            border-bottom: 1px solid rgba(255,255,255,0.28);
+            border-radius: 0;
+            background: rgba(0,0,0,0.25);
+            color: #fff;
+            font-family: "Inter", sans-serif;
+            font-size: 11px;
+            height: 40px;
+            padding: 10px 12px 10px 38px;
+            transition: 0.3s ease;
+        }
+
+        .input-box input::placeholder { color: rgba(255,255,255,0.55); }
+
+        .input-box input:focus {
+            border-bottom-color: #00b843;
+            background: rgba(0,0,0,0.4);
+        }
+
+        /* ALERT */
+        .alert-box {
+            background: rgba(220,53,69,0.2);
+            border: 1px solid rgba(220,53,69,0.4);
+            border-radius: 4px;
+            color: #ff6b6b;
+            font-size: 11px;
+            padding: 10px 14px;
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        /* AUTH LINKS */
+        .auth-link {
+            color: #00c94a;
+            text-decoration: none;
+            font-size: 11px;
+            transition: 0.2s;
+        }
+
+        .auth-link:hover {
+            color: #00e855;
+            text-decoration: underline;
+        }
+
+        .auth-row {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            margin-bottom: 18px;
+        }
+
+        /* BUTTON */
+        .reservation-button {
+            width: 100%;
+            height: 40px;
+            margin-top: 8px;
+            border: none;
+            border-radius: 20px;
+            background: #00a63c;
+            color: #fff;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.7px;
+            cursor: pointer;
+            transition: 0.3s ease;
+        }
+
+        .reservation-button i { margin-right: 6px; }
+
+        .reservation-button:hover {
+            background: #00c94a;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0,180,60,0.35);
+        }
+
+        /* FOOTER */
+        .auth-footer {
+            margin-top: 20px;
+            padding-top: 16px;
+            border-top: 1px solid rgba(255,255,255,0.12);
+            font-size: 11px;
+            color: rgba(255,255,255,0.55);
             text-align: center;
         }
 
-        .auth-logo-icon {
-            width: 60px;
-            height: 60px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
-            display: inline-flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-            font-size: 28px;
-            margin-bottom: 12px;
+        /* MOBILE */
+        @media (max-width: 576px) {
+            .reservation-menu { top: 15px; right: 15px; }
+            .menu-icon { width: 40px; height: 40px; }
+            .menu-icon i { font-size: 16px; }
+            .reservation-wrapper { padding: 85px 15px 30px; }
+            .reservation-card { max-width: 100%; padding: 42px 22px 30px; }
+            .reservation-card h2 { font-size: 18px; }
         }
 
-        .form-control-icon {
-            display: flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-            top: 50% !important;
-            transform: translateY(-50%) !important;
-        }
     </style>
-</head>
 
-<body>
-    <div class="container p-3">
-        <div class="auth-card mx-auto">
-            <!-- Auth Header -->
-            <div class="auth-header text-center">
-                <div class="auth-logo-icon mx-auto">
-                    <i class="#" style="color:#ffffff">
-                        <img src="{{ asset('assets/images/logo/5.png') }}" alt="Logo" class="img-fluid" style="width: 40px; height: 40px;">
-                    </i>
-                </div>
-                <h4 class="fw-bold mb-1 text-white">Nusantara Restaurant</h4>
-                <p class="mb-0 opacity-75 small">System Login Admin & POS Dashboard</p>
+</head>
+<body class="reservation-page">
+
+    <!-- TOP MENU -->
+    <div class="reservation-menu">
+        <a href="{{ url('/utama') }}" class="menu-icon" title="Home">
+            <i class="bi bi-house-fill"></i>
+        </a>
+        <a href="#" class="menu-icon active" title="Login">
+            <i class="bi bi-box-arrow-in-right"></i>
+        </a>
+    </div>
+
+
+    <main class="reservation-wrapper">
+
+        <div class="reservation-card">
+
+            <!-- LOGO -->
+            <div class="reservation-logo">
+                <img src="{{ asset('assets/images/logo/5.png') }}"
+                     alt="Nusantara Restaurant">
             </div>
 
-            <!-- Auth Body / Form -->
-            <div class="p-4 p-md-5">
-                <h5 class="fw-bold text-dark mb-1">Selamat Datang!</h5>
-                <p class="text-muted small mb-4">Masukan kredensial akun admin kamu untuk melanjutkan.</p>
+            <!-- TITLE -->
+            <h2>SELAMAT DATANG</h2>
+            <p class="reservation-subtitle">
+                Masuk ke panel admin Nusantara Restaurant
+            </p>
 
-                <form action="{{ route('dashboard') }}" method="GET">
+            <!-- ALERT -->
+            @if ($errors->any())
+                <div class="alert-box">
+                    {{ $errors->first() }}
+                </div>
+            @endif
 
-                    <!-- Input Email / Username -->
-                    <div class="form-group position-relative has-icon-left mb-3">
-                        <input type="text" class="form-control form-control-lg" placeholder="Username / Email" value="" required>
-                        <div class="form-control-icon">
-                            <i class="bi bi-person"></i>
-                        </div>
-                    </div>
+            <!-- FORM -->
+            <form action="{{ route('login.attempt') }}"
+                  method="POST"
+                  class="reservation-form">
+                @csrf
 
-                    <!-- Input Password -->
-                        <div class="form-group position-relative has-icon-left mb-3">
-                            <input type="password" class="form-control form-control-lg" placeholder="Kata Sandi" required>
+                <!-- USERNAME / EMAIL -->
+                <div class="input-box">
+                    <i class="bi bi-person-fill"></i>
+                    <input type="text"
+                           name="email"
+                           placeholder="Username / Email"
+                           required>
+                </div>
 
-                            <div class="form-control-icon top-50 translate-middle-y position-absolute me-7 align-items-center d-flex has-icon-left " style="left: 0; top: 50%; transform: translateY(-50%);">
-                                <i class="bi bi-shield-lock" style="align-items:inherit"></i>
-                            </div>
-                        </div>
-                    <!-- Remember & Forgot Password -->
-                    <div class="d-flex align-items-center justify-content-between mb-4 small">
-                        {{-- <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="rememberMe" checked>
-                            <label class="form-check-label text-muted" for="rememberMe">Lihat sandi</label>
-                        </div> --}}
-                        <a href="{{ route('forgot') }}" class="text-primary font-bold text-decoration-none" style="align-items: Left">Lupa Password?</a>
-                    </div>
+                <!-- PASSWORD -->
+                <div class="input-box">
+                    <i class="bi bi-shield-lock-fill"></i>
+                    <input type="password"
+                           name="password"
+                           placeholder="Kata Sandi"
+                           required>
+                </div>
 
-                    <!-- Submit Button -->
-                    <button type="submit" class="btn-primary btn-lg w-100 font-bold shadow d-flex justify-content-center gap-2">
-                        <i class="#" style="align-items:inherit"></i>
-                        <span>
-                            <b style="text-align: center">Masuk</b>
-                        </span>
-                    </button>
-                </form>
+                <!-- LUPA PASSWORD -->
+                <div class="auth-row">
+                    <a href="{{ route('forgot') }}" class="auth-link">Lupa Password?</a>
+                </div>
 
-                {{-- <!-- Footer Text -->
-                <div class="text-center mt-4 pt-3 border-top small text-muted">
-                    <span>Belum punya akun admin? </span>
-                    <a href="{{ route('register') }}" class="text-primary font-bold text-decoration-none">Daftar Akun Baru</a>
-                </div> --}}
+                <!-- BUTTON -->
+                <button type="submit" class="reservation-button">
+                    <i class="bi bi-box-arrow-in-right"></i>
+                    MASUK
+                </button>
+
+            </form>
+
+            <!-- FOOTER -->
+            <div class="auth-footer">
+                <span>Belum punya akun admin? </span>
+                <a href="{{ route('register') }}" class="auth-link">Daftar Akun Baru</a>
             </div>
 
         </div>
-    </div>
+
+    </main>
+
+
+    <script src="{{ asset('asst/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 
 </body>
 </html>
-

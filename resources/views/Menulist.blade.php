@@ -159,25 +159,45 @@
                                         <small class="text-muted extra-small">HPP: Rp {{ number_format($menu->modal_hpp, 0, ',', '.') }}</small>
                                     @endif
                                 </div>
-                                <div class="d-inline-flex gap-1">
-                                    <!-- Toggle Status Button -->
-                                    <form action="{{ route('menu.status', $menu->id) }}" method="POST" class="d-inline">
-                                        @csrf
-                                        @method('PATCH')
-                                        <button type="submit" class="btn btn-sm btn-outline-secondary py-1 px-2" title="Ubah Status Ready/Habis">
-                                            <i class="bi bi-arrow-repeat"></i>
-                                        </button>
-                                    </form>
+                            <div class="d-inline-flex gap-1">
 
-                                    <!-- Delete Menu Button -->
-                                    <form action="{{ route('menu.destroy', $menu->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus menu ini dari database?')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-outline-danger py-1 px-2" title="Hapus Menu">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
-                                    </form>
-                                </div>
+                                <!-- Edit Menu Button -->
+                                <button type="button"
+                                        class="btn btn-sm btn-outline-warning py-1 px-2"
+                                        title="Edit Menu"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#editMenuModal{{ $menu->id }}">
+                                    <i class="bi bi-pencil-square"></i>
+                                </button>
+
+                                <!-- Toggle Status -->
+                                <form action="{{ route('menu.status', $menu->id) }}" method="POST" class="d-inline">
+                                    @csrf
+                                    @method('PATCH')
+
+                                    <button type="submit"
+                                            class="btn btn-sm btn-outline-secondary py-1 px-2"
+                                            title="Ubah Status Ready/Habis">
+                                        <i class="bi bi-arrow-repeat"></i>
+                                    </button>
+                                </form>
+
+                                <!-- Delete -->
+                                <form action="{{ route('menu.destroy', $menu->id) }}"
+                                    method="POST"
+                                    class="d-inline"
+                                    onsubmit="return confirm('Apakah Anda yakin ingin menghapus menu ini dari database?')">
+                                    @csrf
+                                    @method('DELETE')
+
+                                    <button type="submit"
+                                            class="btn btn-sm btn-outline-danger py-1 px-2"
+                                            title="Hapus Menu">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </form>
+
+                            </div>
                             </div>
                         </div>
                     </div>
@@ -198,7 +218,351 @@
             </div>
         @endforelse
 
-    </div>
+
+
+        @foreach ($menus as $menu)
+
+        <div class="modal fade"
+            id="editMenuModal{{ $menu->id }}"
+            tabindex="-1"
+            aria-labelledby="editMenuModalLabel{{ $menu->id }}"
+            aria-hidden="true">
+
+            <div class="modal-dialog modal-lg modal-dialog-centered">
+
+                <div class="modal-content border-0 shadow">
+
+                    {{-- Modal Header --}}
+                    <div class="modal-header bg-primary text-white py-3">
+
+                        <div class="d-flex align-items-center gap-2">
+
+                            <i class="bi bi-pencil-square"></i>
+
+                            <div>
+                                <h5 class="modal-title font-bold text-white mb-0"
+                                    id="editMenuModalLabel{{ $menu->id }}">
+                                    Edit Menu Restoran
+                                </h5>
+
+                                <small class="opacity-75" style="font-size: 0.78rem;">
+                                    Ubah informasi makanan/minuman yang sudah ada di database
+                                </small>
+                            </div>
+
+                        </div>
+
+                        <button type="button"
+                                class="btn-close btn-close-white"
+                                data-bs-dismiss="modal"
+                                aria-label="Close">
+                        </button>
+
+                    </div>
+
+
+                    {{-- Modal Form --}}
+                    <form action="{{ route('menu.update', $menu->id) }}"
+                        method="POST"
+                        enctype="multipart/form-data">
+
+                        @csrf
+                        @method('PUT')
+
+                        <div class="modal-body p-4">
+
+                            <div class="row g-3">
+
+                                {{-- Nama Menu --}}
+                                <div class="col-12 col-md-8">
+
+                                    <label class="form-label font-bold text-dark small">
+                                        Nama Menu
+                                        <span class="text-danger">*</span>
+                                    </label>
+
+                                    <input type="text"
+                                        class="form-control"
+                                        name="nama"
+                                        value="{{ $menu->nama }}"
+                                        placeholder="Contoh: Nasi Goreng Wagyu Special"
+                                        required>
+
+                                </div>
+
+
+                                {{-- Kategori --}}
+                                <div class="col-12 col-md-4">
+
+                                    <label class="form-label font-bold text-dark small">
+                                        Kategori
+                                        <span class="text-danger">*</span>
+                                    </label>
+
+                                    <select class="form-select"
+                                            name="kategori"
+                                            required>
+
+                                        <option value="Makanan Utama"
+                                            {{ $menu->kategori == 'Makanan Utama' ? 'selected' : '' }}>
+                                            Makanan Utama
+                                        </option>
+
+                                        <option value="Minuman Dingin"
+                                            {{ $menu->kategori == 'Minuman Dingin' ? 'selected' : '' }}>
+                                            Minuman Dingin
+                                        </option>
+
+                                        <option value="Minuman Panas"
+                                            {{ $menu->kategori == 'Minuman Panas' ? 'selected' : '' }}>
+                                            Minuman Panas
+                                        </option>
+
+                                        <option value="Dessert"
+                                            {{ $menu->kategori == 'Dessert' ? 'selected' : '' }}>
+                                            Dessert / Penutup
+                                        </option>
+
+                                        <option value="Snack"
+                                            {{ $menu->kategori == 'Snack' ? 'selected' : '' }}>
+                                            Snack / Camilan
+                                        </option>
+
+                                        <option value="Paket Combo"
+                                            {{ $menu->kategori == 'Paket Combo' ? 'selected' : '' }}>
+                                            Paket Combo
+                                        </option>
+
+                                    </select>
+
+                                </div>
+
+
+                                {{-- Harga Jual --}}
+                                <div class="col-12 col-md-6">
+
+                                    <label class="form-label font-bold text-dark small">
+                                        Harga Jual (Rp)
+                                        <span class="text-danger">*</span>
+                                    </label>
+
+                                    <div class="input-group">
+
+                                        <span class="input-group-text bg-light font-semibold text-muted">
+                                            Rp
+                                        </span>
+
+                                        <input type="number"
+                                            class="form-control"
+                                            name="harga"
+                                            value="{{ $menu->harga }}"
+                                            min="0"
+                                            required>
+
+                                    </div>
+
+                                </div>
+
+
+                                {{-- Modal HPP --}}
+                                <div class="col-12 col-md-6">
+
+                                    <label class="form-label font-bold text-dark small">
+                                        Modal HPP (Rp)
+                                    </label>
+
+                                    <div class="input-group">
+
+                                        <span class="input-group-text bg-light font-semibold text-muted">
+                                            Rp
+                                        </span>
+
+                                        <input type="number"
+                                            class="form-control"
+                                            name="modal_hpp"
+                                            value="{{ $menu->modal_hpp }}"
+                                            min="0">
+
+                                    </div>
+
+                                </div>
+
+
+                                {{-- Estimasi --}}
+                                <div class="col-12 col-md-6">
+
+                                    <label class="form-label font-bold text-dark small">
+                                        Estimasi Pembuatan (Menit)
+                                    </label>
+
+                                    <div class="input-group">
+
+                                        <input type="number"
+                                            class="form-control"
+                                            name="estimasi_menit"
+                                            value="{{ $menu->estimasi_menit }}"
+                                            min="1">
+
+                                        <span class="input-group-text bg-light text-muted">
+                                            Menit
+                                        </span>
+
+                                    </div>
+
+                                </div>
+
+
+                                {{-- Status --}}
+                                <div class="col-12 col-md-6">
+
+                                    <label class="form-label font-bold text-dark small">
+                                        Status Ketersediaan
+                                        <span class="text-danger">*</span>
+                                    </label>
+
+                                    <select class="form-select"
+                                            name="status"
+                                            required>
+
+                                        <option value="tersedia"
+                                            {{ $menu->status == 'tersedia' ? 'selected' : '' }}>
+                                            🟢 Tersedia (Ready Stock)
+                                        </option>
+
+                                        <option value="habis"
+                                            {{ $menu->status == 'habis' ? 'selected' : '' }}>
+                                            🔴 Habis (Sold Out)
+                                        </option>
+
+                                    </select>
+
+                                </div>
+
+
+                                {{-- Deskripsi --}}
+                                <div class="col-12">
+
+                                    <label class="form-label font-bold text-dark small">
+                                        Deskripsi & Catatan Resep
+                                    </label>
+
+                                    <textarea class="form-control"
+                                            name="deskripsi"
+                                            rows="3"
+                                            placeholder="Jelaskan bahan utama, tingkat kepedasan, atau rasa khas menu ini...">{{ $menu->deskripsi }}</textarea>
+
+                                </div>
+
+
+                                {{-- FOTO MENU --}}
+                                <div class="col-12">
+
+                                    <label class="form-label font-bold text-dark small">
+                                        Foto Menu
+                                    </label>
+
+                                    <div class="row g-3 align-items-center">
+
+                                        {{-- Foto Lama --}}
+                                        <div class="col-md-4">
+
+                                            <div class="text-center p-2 bg-light rounded border">
+
+                                                <small class="text-muted d-block mb-2">
+                                                    Foto Saat Ini
+                                                </small>
+
+                                                @if ($menu->gambar)
+
+                                                    <img src="{{ asset($menu->gambar) }}"
+                                                        alt="{{ $menu->nama }}"
+                                                        class="img-thumbnail shadow-sm"
+                                                        style="width: 100%; height: 140px; object-fit: cover;">
+
+                                                @else
+
+                                                    <div class="text-muted py-5">
+                                                        Tidak ada gambar
+                                                    </div>
+
+                                                @endif
+
+                                            </div>
+
+                                        </div>
+
+
+                                        {{-- Upload Foto Baru --}}
+                                        <div class="col-md-8">
+
+                                            <input type="file"
+                                                class="form-control"
+                                                name="gambar"
+                                                accept="image/*"
+                                                onchange="previewEditMenuImage(this, {{ $menu->id }})">
+
+                                            <small class="text-muted">
+                                                Kosongkan jika tidak ingin mengganti gambar.
+                                            </small>
+
+
+                                            {{-- Preview --}}
+                                            <div id="editImagePreviewContainer{{ $menu->id }}"
+                                                class="mt-3 d-none text-center p-3 bg-light rounded border border-dashed">
+
+                                                <p class="small text-muted mb-2">
+                                                    Preview Foto Baru:
+                                                </p>
+
+                                                <img id="editMenuImagePreview{{ $menu->id }}"
+                                                    src="#"
+                                                    alt="Preview"
+                                                    class="img-thumbnail shadow-sm"
+                                                    style="max-height: 180px; object-fit: cover;">
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        {{-- Modal Footer --}}
+                        <div class="modal-footer bg-light px-4 py-3">
+
+                            <button type="button"
+                                    class="btn btn-outline-secondary"
+                                    data-bs-dismiss="modal">
+                                Batal
+                            </button>
+
+                            <button type="submit"
+                                    class="btn btn-primary px-4 font-bold">
+
+                                <i class="bi bi-check-lg me-1"></i>
+
+                                Simpan Perubahan
+
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        @endforeach
+            </div>
 </div>
 
 <!-- Modal Popup Tambah Menu Makanan / Minuman (Embedded langsung di file Menulist) -->
