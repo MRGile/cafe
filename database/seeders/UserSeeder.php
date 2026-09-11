@@ -1,28 +1,24 @@
 <?php
 
-namespace App\Models;
+namespace Database\Seeders;
 
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
-class User extends Authenticatable
+class UserSeeder extends Seeder
 {
-    use Notifiable;
-
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-        'role_id',
-    ];
-
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
-
-    public function role()
+    public function run(): void
     {
-        return $this->belongsTo(Role::class);
+        $adminRole = DB::table('roles')
+            ->where('nama_peran', 'Admin')
+            ->first();
+
+        DB::table('users')->insertOrIgnore([
+            'name' => 'Admin Kedai Kopi',
+            'email' => 'AdminNusantara@gmail.com',
+            'password' => Hash::make('Nusantara123'),
+            'role_id' => $adminRole?->id,
+        ]);
     }
 }
