@@ -22,7 +22,7 @@ class AuthController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->route('halaman-utama-admin');
+        return redirect()->route('dashboard');
     }
 
     public function logout(Request $request)
