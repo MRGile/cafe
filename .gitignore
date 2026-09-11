@@ -25,3 +25,32 @@ _ide_helper.php
 Homestead.json
 Homestead.yaml
 Thumbs.db
+
+# Database
+*.sql
+*.sqlite
+*.sqlite3
+*.db
+*.bak
+
+# Backup / Archive
+*.zip
+*.rar
+*.7z
+*.tar
+*.gz
+
+# Laravel storage
+/storage/logs/*
+/storage/framework/cache/*
+/storage/framework/sessions/*
+/storage/framework/testing/*
+/storage/framework/views/*
+
+# Environment
+.env.*
+!.env.example
+
+# IDE
+/.fleet
+/.vs
