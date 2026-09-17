@@ -73,15 +73,15 @@ Route::get('/register', function () { return view('register'); })->name('registe
 Route::get('/forgot', function () { return view('forgot'); })->name('forgot');
 
 // Menu yang di perlu admin
-  use App\Http\Controllers\AuthController;
+use App\Http\Controllers\AuthController;
 
-    Route::get('/login', function () { return view('login'); })->name('login');
-    Route::post('/login', [AuthController::class, 'login'])->name('login.attempt');
-    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::get('/login', function () { return view('login'); })->name('login');
+Route::post('/login', [AuthController::class, 'login'])->name('login.attempt');
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-    Route::middleware('auth')->group(function () {
-        // Route::get('/dashboard', function () {return view('dashboard');})->name('dashboard');
-        // Route::get('/Menulist', function () {return view('Menulist');})->name('Menulist');
-        // Route::get('/reservation', function () {return view('reservation');})->name('reservation');
-        // Route::get('/employeelist', function () {return view('employeelist');})->name('employeelist');
-    });
+Route::middleware('auth')->group(function () {
+    Route::get('/dashboard', function () {return view('dashboard');})->name('dashboard');
+    Route::get('/Menulist', function () {return view('Menulist');})->name('Menulist');
+    Route::get('/reservation', function () {return view('reservation');})->name('reservation');
+    Route::get('/employeelist', function () {return view('employeelist');})->name('employeelist');
+});
